@@ -1,136 +1,117 @@
-Quantitative Trading Strategy Using Yahoo Finance Data
-Overview
-This project develops and analyzes a quantitative trading strategy using historical US equity price data, fetched via Yahoo Finance’s API. The strategy focuses on moving average crossovers and evaluates performance using key financial metrics. The workflow enables experimentation and showcases techniques for risk management and optimization.
+# Quantitative Trading Strategy Using Yahoo Finance Data  
 
-Problem Statement
-Fetches historical adjusted closing prices for multiple US equities, ensuring broad sector coverage for robust analysis.
+## 📌 Overview  
+This project develops and analyzes a **quantitative trading strategy** using historical US equity price data, fetched via **Yahoo Finance’s API**.  
+The strategy focuses on **moving average crossovers** and evaluates performance using key financial metrics.  
+The workflow enables experimentation and showcases techniques for **risk management and optimization**.  
 
-Computes daily returns, ignoring trading costs and slippage at this stage.
+---
 
-Constructs an unbalanced panel dataset for further strategy testing.
+## 🎯 Problem Statement  
+- Fetches historical **adjusted closing prices** for multiple US equities, ensuring **broad sector coverage**.  
+- Computes **daily returns**, ignoring trading costs and slippage at this stage.  
+- Constructs an **unbalanced panel dataset** for testing.  
+- Selects firms and industries for **diverse market representation**.  
 
-Selects sample firms and industries to include diverse market representation.
+---
 
-Data Extraction
-Utilizes the yfinance Python library to download daily price data for chosen US stocks.
+## 📊 Data Extraction  
+- Utilizes the **`yfinance`** Python library to download daily stock price data.  
+- Focuses on **adjusted close prices** (accounts for splits and dividends).  
+- Computes **daily returns**:  
 
-Focuses on adjusted close prices (accounts for splits/dividends).
+\[
+Return_t = \frac{P_t - P_{t-1}}{P_{t-1}}
+\]
 
-Calculates daily returns:
+where \( P_t \) is the adjusted close price at time \( t \).  
 
-Return
-t
-=
-P
-t
-−
-P
-t
-−
-1
-P
-t
-−
-1
-Return 
-t
- = 
-P 
-t−1
- 
-P 
-t
- −P 
-t−1
- 
- 
-where 
-P
-t
-P 
-t
-  is the adjusted close price on day 
-t
-t.
+- Handles **missing data points** inherent to unbalanced panels.  
 
-Handles missing data points inherent to unbalanced panels.
+---
 
-Trading Strategy
-Implements a moving average crossover approach:
+## 📈 Trading Strategy  
+Implements a **moving average crossover** approach:  
+- **Short-Term Moving Average (SMA)**  
+- **Long-Term Moving Average (LMA)**  
 
-Short-Term Moving Average (SMA)
+**Signals:**  
+- ✅ **Buy** → Short-term MA crosses above long-term MA (upward momentum).  
+- ❌ **Sell** → Short-term MA crosses below long-term MA (downward momentum).  
 
-Long-Term Moving Average (LMA)
+Applied across all selected stocks, managing **long and short positions** accordingly.  
 
-Buy Signal: Short-term MA crosses above long-term MA (upward momentum).
+---
 
-Sell Signal: Short-term MA crosses below long-term MA (downward momentum).
+## 📉 Performance Metrics  
+- **Average Return** → Mean of daily portfolio returns.  
+- **Volatility** → Standard deviation of portfolio returns.  
+- **Sharpe Ratio** → Risk-adjusted return, accounting for volatility and a risk-free rate.  
+- **Maximum Drawdown** → Largest drop from peak to trough.  
+- **Signal Accuracy** → % of profitable trades from strategy signals.  
+- **Beta Estimation** → Regression of strategy returns against market returns.  
 
-Applies signals across all selected stocks, managing long and short positions accordingly.
+---
 
-Performance Metrics
-Average Return: Mean daily portfolio returns.
+## 🔍 Observations  
+- Strategy’s **cumulative returns consistently outperformed** the market benchmark.  
+- **Average return, volatility, and max drawdown** were strong indicators.  
+- **Sharpe ratio** was modest, showing limited risk-adjusted performance.  
 
-Volatility: Standard deviation of portfolio returns.
+---
 
-Sharpe Ratio: Risk-adjusted return, accounting for volatility and a risk-free rate.
+## 🔧 Strategy Improvements  
+- **Window Tuning** → Tested different moving average lengths.  
+- **Exponentially Weighted Averages (EWA)** →  
+  - More weight on recent data → reduced lag.  
+  - Slightly improved Sharpe ratio but introduced **whipsaws** in sideways markets.  
+- **Stock Weighting by Volatility** → Decreased Sharpe ratio unexpectedly.  
 
-Maximum Drawdown: Largest drop from peak to trough in portfolio value.
+📌 **Key Insight**: EWA improved responsiveness but could **overreact** in certain markets, leading to higher trading costs.  
 
-Signal Accuracy: Proportion of profitable trades triggered by strategy signals.
+---
 
-Beta Estimation: Regression of strategy returns against market returns.
+## ✅ Conclusion  
+- Both **technical indicators** and **risk metrics** provide insights.  
+- The **choice of moving average (SMA vs. EWA)** did not dramatically affect risk-adjusted returns.  
+- **Sharpe ratio** depended more on **stock selection** and **market conditions**.  
+- Future improvements could include:  
+  - Longer-term moving averages  
+  - Value-based stock selection  
+  - Incorporation of **transaction costs & slippage**  
 
-Observations
-The strategy’s cumulative returns curve consistently outperformed the market benchmark throughout the analysis period.
+---
 
-Average return, volatility, and maximum drawdown were valuable metrics, while the Sharpe ratio indicated modest risk-adjusted performance.
+## 📂 Project Structure  
+├── data/ # Historical stock price data storage
+├── notebooks/ # Jupyter notebooks for analysis & visualization
+├── src/ # Core scripts
+│ ├── data_fetch.py # Yahoo Finance extraction
+│ ├── strategy.py # Trading logic
+│ ├── metrics.py # Performance metrics
+├── results/ # Output plots & analytics
+├── README.md # Project documentation
 
-Strategy Improvement
-Window Tuning: Experimented with different lengths for moving average windows.
+yaml
+Copy code
 
-Exponentially Weighted Averages (EWA):
+---
 
-EWA gives more weight to recent prices, reducing lag.
+## ⚙️ Installation & Usage  
 
-Observed that EWA improved Sharpe ratio slightly, but increased sensitivity resulted in more frequent trading signals (potential whipsaws).
-
-Stock Weighting: Tried weighting positions by volatility, but it decreased Sharpe ratio—other enhancements explored.
-
-Key Insight: EWA may overreact in sideways markets, causing higher transaction costs and lower net returns.
-
-Conclusion
-Both technical indicators and risk metrics offer insights, but the type of moving average (SMA vs. EWA) did not dramatically impact risk-adjusted returns.
-
-The Sharpe ratio was more dependent on stock selection and market conditions than the moving average method itself.
-
-For better results, consider experimenting with longer-term averages, value-based selection criteria, and incorporating realistic transaction costs.
-
-Project Structure
-text
-├── data/                # Historical stock price data storage
-├── notebooks/           # Jupyter notebooks for analysis & visualization
-├── src/                 # Core scripts
-│   ├── data_fetch.py    # Yahoo Finance extraction
-│   ├── strategy.py      # Trading logic
-│   ├── metrics.py       # Performance metrics
-├── results/             # Output plots & analytics
-├── README.md            # Project documentation
-Installation & Usage
-Clone the repository:
-
-bash
+### 1️⃣ Clone the repository  
+```bash
 git clone https://github.com/your-username/quant-trading-strategy.git
 cd quant-trading-strategy
-Install dependencies:
-
+2️⃣ Install dependencies
 bash
+Copy code
 pip install -r requirements.txt
-Run the strategy:
-
+3️⃣ Run the strategy
 bash
+Copy code
 python src/strategy.py
-Explore with Jupyter Notebook:
-
+4️⃣ Explore with Jupyter Notebook
 bash
+Copy code
 jupyter notebook notebooks/
